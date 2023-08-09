@@ -13,6 +13,12 @@ const ROLE_MESSAGES = {
 };
 
 module.exports = async (reaction, user) => {
+
+    const config = {
+        headers: { Authorization: `Bearer ${process.env.UNDERDOG_API_KEY}` }
+    }
+
+
     if (reaction.partial) {
         // If the message this reaction belongs to was removed, the fetching might result in an API error which should be handled
         try {
@@ -37,6 +43,8 @@ module.exports = async (reaction, user) => {
                 let user = await User.findByPk(message.author.id)
                 let roles = Array.from(new Set(user.roles.split(','))).filter(a=>a !== role)
                 user.roles = roles.join(",")
+                console.log("New user roles")
+                console.log(roles)
                 await user.save()
 
                 

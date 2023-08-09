@@ -8,7 +8,7 @@ const TOKEN = process.env.BOT_TOKEN;
 const PREFIX = '!';
 
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessageReactions],
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildMembers],
     partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
@@ -26,9 +26,12 @@ client.once('ready', () => {
 });
 
 client.on('messageCreate', async message => {
-    console.log("WE got a message")
     
     if (message.author.bot) return;
+
+    // This is where we stick points/level tracking
+    //
+
     if (!message.content.startsWith(PREFIX)) return;
 
     const commandBody = message.content.slice(PREFIX.length);
@@ -48,5 +51,6 @@ client.on('messageCreate', async message => {
 
 client.on('messageReactionAdd', require('./events/messageReactionAdd'));
 client.on('messageReactionRemove', require('./events/messageReactionRemove'));
+client.on('guildMemberUpdate', require('./events/guildMemberUpdate'))
 
 client.login(TOKEN);
