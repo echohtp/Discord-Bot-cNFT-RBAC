@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const web3 = require('@solana/web3.js')
 const {v4} = require('uuid');
 
 module.exports = async (message, args) => {
@@ -10,6 +11,12 @@ module.exports = async (message, args) => {
     if (requester && requester.membershipNFTPublicKey != null) {
         return message.reply(`Your MemberMint NFT was already issued!`);
     }
+
+    try {
+        new web3.PublicKey(args[0])
+    }catch {
+        return message.reply("Not a valid Solana address, try again.")
+    }  
 
     try {
         const _key = v4()
