@@ -37,6 +37,13 @@ module.exports = async (reaction, user) => {
                 user.roles = roles.join(",")
                 await user.save()
 
+                let rArr = user.roles.split(",")
+                let atts = {}
+                for (var i = 0;i < rArr.length; i++){
+                    atts[rArr[i]] = ""
+                }
+                
+                await axios.put(`${process.env.UNDERDOG_API}/v2/projects/${process.env.UNDERDOG_PROJECT_ID}/nfts/${user.nftId}`, {attributes: atts, image: "https://ipfs.io/ipfs/bafybeigy65aewj3nxon4xpa7vfysvsqxmp6g5wm5s3dgx2o6pwhr6rgcgu"}, config)
             }
         }
     }
